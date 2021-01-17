@@ -93,7 +93,7 @@ namespace PiAware2SQLV4
          */
         {
             var localcon = new SqlConnection();
-            localcon.ConnectionString = "Data Source=piawaredbserver.database.windows.net;Initial Catalog=PiAwaredb;user id=PiAware;Password=Demopass@word1";
+            localcon.ConnectionString = "Data Source=piawaredbserver.database.windows.net;Initial Catalog=PiAwaredb;user id=youruser;Password=yourpassword";
             localcon.Open();
 
             return localcon;
