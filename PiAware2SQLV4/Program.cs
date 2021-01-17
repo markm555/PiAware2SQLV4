@@ -124,14 +124,16 @@ namespace PiAware2SQLV4
         {
             con1 = AzureSqlconnect();
             con2 = SQLDBconnect();
-            double mylat = 33.076153;  //**  My   **
-            double mylon = -97.10859;  //** House **
-
-            /*
+            
+                        /*
              **** Microsoft Las Colinas Office ****
              ****      GPS Coordinates         ****
             //32.900076025507246, -96.96343451541534
             */
+            double mylat = 32.90007; 
+            double mylon = -96.96343;  
+
+
 
             /* 
              ****  Variables used in main processing loop  ****
