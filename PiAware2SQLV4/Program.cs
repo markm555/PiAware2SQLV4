@@ -40,9 +40,9 @@ namespace PiAware2SQLV4
             public string squawk { get; set; }          // Aircraft assigned squawk code
             public string emergency { get; set; }       // Whether or not a captain or crew has indicated plane is in a state of emergency
             public string category { get; set; }        // indicates what type of transmission equipment is on board: Class A1, A1S, A2, A3, B1S or B1 equipment
-            public double nav_qnh { get; set; }         //Related to QNH, which is a barometer corrected for ground altitude
-            public double nav_altitude_mcp { get; set; }//?
-            public double nav_heading { get; set; }     //?
+            public double nav_qnh { get; set; }         // Related to QNH, which is a barometer corrected for ground altitude
+            public double nav_altitude_mcp { get; set; }// ?
+            public double nav_heading { get; set; }     // ?
             public string nav_modes { get; set; }       // Navigation mode such as autopilot
             public double lat { get; set; }             // Latitude of current position
             public double lon { get; set; }             // Longitude of current position
@@ -316,7 +316,6 @@ namespace PiAware2SQLV4
 
                 }
                 catch { }
-                //Console.WriteLine(prec);
 
                 Console.WriteLine("----------------------------------------------------------------------------------------");
                 Console.WriteLine("                                                                                        ");
