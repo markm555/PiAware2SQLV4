@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiAware2SQLV4", "PiAware2SQLV4\PiAware2SQLV4.csproj", "{8E54D8A2-BB9C-4332-9ACE-91BBDFFBE1FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E54D8A2-BB9C-4332-9ACE-91BBDFFBE1FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E54D8A2-BB9C-4332-9ACE-91BBDFFBE1FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E54D8A2-BB9C-4332-9ACE-91BBDFFBE1FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E54D8A2-BB9C-4332-9ACE-91BBDFFBE1FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CEF3AD78-401E-406D-BED0-3B035E7F09A1}
+	EndGlobalSection
+EndGlobal
