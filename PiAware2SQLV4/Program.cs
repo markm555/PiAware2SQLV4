@@ -26,7 +26,7 @@ namespace PiAware2SQLV4
     {
         private static SqlConnection con1;
         private static SqlConnection con2;
-        /// <summary>
+
         public class Flightrec
         {
             public DateTime dt { get; set; }            // Date Time from system
@@ -95,7 +95,6 @@ namespace PiAware2SQLV4
             var localcon = new SqlConnection();
             localcon.ConnectionString = "Data Source=piawaredbserver.database.windows.net;Initial Catalog=PiAwaredb;user id=youruser;Password=yourpassword";
             localcon.Open();
-
             return localcon;
         }
 
@@ -107,7 +106,6 @@ namespace PiAware2SQLV4
             var localcon2 = new SqlConnection();
             localcon2.ConnectionString = "Data Source=SQLDB;Initial Catalog=PiAwaredb;Integrated Security = True";
             localcon2.Open();
-
             return localcon2;
         }
 
@@ -117,19 +115,17 @@ namespace PiAware2SQLV4
          */
         {
             public static string EndPoint = "http://192.168.0.129/dump1090-fa/data/aircraft.json";
-
-
         }
+        
         static void Main()
         {
             con1 = AzureSqlconnect();
             con2 = SQLDBconnect();
-            
-                        /*
-             **** Microsoft Las Colinas Office ****
-             ****      GPS Coordinates         ****
+           
+            //**** Microsoft Las Colinas Office ****
+            //****      GPS Coordinates         ****
             //32.900076025507246, -96.96343451541534
-            */
+            
             double mylat = 32.90007; 
             double mylon = -96.96343;  
 
@@ -138,13 +134,13 @@ namespace PiAware2SQLV4
             /* 
              ****  Variables used in main processing loop  ****
             */
+            
             double distance = 0;
             var tcount = 0;
-
             var webClient = new WebClient();
             webClient.BaseAddress = StaticItems.EndPoint;
 
-            Console.Clear();
+            Console.Clear();  //clear the console
 
             while (true)
             {
@@ -155,7 +151,7 @@ namespace PiAware2SQLV4
                     JToken token = JToken.Parse(json);
                     JArray aircraft = (JArray)token.SelectToken("aircraft");
                     JArray saircraft = new JArray(aircraft.OrderBy(obj => (string)obj["flight"]));
-                    //Console.Clear();
+                    // Write headers at top of console screen
                     Console.SetCursorPosition(0, 0);
                     Console.WriteLine("----------------------------------------------------------------------------------------");
                     Console.WriteLine("|                        --  Write to two SQL Databases                                |");
@@ -165,6 +161,7 @@ namespace PiAware2SQLV4
 
                     var i = 0;
 
+                    // Only process records with the hex,flight,lat,lon,alt_baro,baro_rate,track and gs columns
                     foreach (JToken ac in saircraft)
                     {
                         if (ac["hex"] != null &
@@ -179,6 +176,7 @@ namespace PiAware2SQLV4
                         {
                             i++;
 
+                            // set variables with the contents of record in JArray.  One record is written to the databases and console for each pass of the loop
                             Flightrec prec = new Flightrec
                             {
                                 dt = DateTime.Now,
@@ -214,6 +212,7 @@ namespace PiAware2SQLV4
                                 distance = distance = Miles(Convert.ToDouble(ac["lat"]), mylat, Convert.ToDouble(ac["lon"]), mylon)
                             };
 
+                            // Strings to display variable values on the console in 10 character wide columns
                             string dflight = prec.flight.PadRight(10);
                             string dlat = Convert.ToString(prec.lat).PadLeft(10);
                             string dlon = Convert.ToString(prec.lon).PadLeft(10);
@@ -222,12 +221,14 @@ namespace PiAware2SQLV4
                             string dvr = Convert.ToString(prec.baro_rate).PadLeft(10);
                             string dem = Convert.ToString(prec.emergency).PadLeft(7);
 
+                            // Set up connections to the SQL Databases I could do this outside of the loop, but doing it here provides more resiliance during a timeout
                             SqlCommand cmd1 = new SqlCommand();
                             cmd1.Connection = con1;
 
                             SqlCommand cmd2 = new SqlCommand();
                             cmd2.Connection = con2;
 
+                            // Open the connections to the databases
                             try
                             {
                                 con1.Open();
@@ -240,6 +241,7 @@ namespace PiAware2SQLV4
                             }
                             catch { }
 
+                            // Create the insert statement and populate parameters with current record values
                             cmd1.CommandText = "INSERT INTO KDFW (dt,hex,squawk,flight,lat,lon,distance, nucp,seen_pos,altitude,vr,track,speed,category,messages,seen,rssi,acode)   VALUES(@param1,@param2,@param3,@param4,@param5,@param6,@param7,@param8,@param9,@param10,@param11,@param12,@param13,@param14,@param15,@param16,@param17,@param18)";
 
                             cmd1.Parameters.AddWithValue("@param1", prec.dt);
@@ -261,6 +263,7 @@ namespace PiAware2SQLV4
                             cmd1.Parameters.AddWithValue("@param17", prec.rssi);
                             cmd1.Parameters.AddWithValue("@param18", prec.acode);
 
+                            // Write the record to SQL.  Try/Catch with recover from a closed SQL connection due to long period with no flight.  Early AM hours.
                             try
                             {
                                 cmd1.ExecuteNonQuery();
@@ -305,7 +308,7 @@ namespace PiAware2SQLV4
                                 con2.Open();
                                 cmd2.ExecuteNonQuery();
                             }
-
+                            // Write the records to the console
                             Console.WriteLine(dflight + " | " + dlat + " | " + dlon + " | " + dalt + " | " + dgs + " | " + dvr + " | " + dem + "  | " + "                ");
 
                         }
@@ -316,11 +319,11 @@ namespace PiAware2SQLV4
 
                 }
                 catch { }
-
+                // Write blank lines to console at the end of the records for passes with fewer records than the previous pass
                 Console.WriteLine("----------------------------------------------------------------------------------------");
                 Console.WriteLine("                                                                                        ");
                 Console.WriteLine("                                                                                        ");
-                Thread.Sleep(1000);
+                Thread.Sleep(1000);  \\ Wait 1 second between set of record writes.  Without this it will write dozens of records to the database per second.
             }
         }
     }
