@@ -148,9 +148,10 @@ namespace PiAware2SQLV4
                 {
                     var json = webClient.DownloadString("aircraft.json");
 
-                    JToken token = JToken.Parse(json);
-                    JArray aircraft = (JArray)token.SelectToken("aircraft");
-                    JArray saircraft = new JArray(aircraft.OrderBy(obj => (string)obj["flight"]));
+                    JToken token = JToken.Parse(json);  // Parse JSON from Rasperry Pi.
+                    JArray aircraft = (JArray)token.SelectToken("aircraft");  // Pull out just the flight records from the JSON.
+                    JArray saircraft = new JArray(aircraft.OrderBy(obj => (string)obj["flight"])); Create a new array and sort records by flight number.
+                        
                     // Write headers at top of console screen
                     Console.SetCursorPosition(0, 0);
                     Console.WriteLine("----------------------------------------------------------------------------------------");
@@ -161,7 +162,7 @@ namespace PiAware2SQLV4
 
                     var i = 0;
 
-                    // Only process records with the hex,flight,lat,lon,alt_baro,baro_rate,track and gs columns
+                    // Only process records with the hex,flight,lat,lon,alt_baro,baro_rate,track and gs columns.
                     foreach (JToken ac in saircraft)
                     {
                         if (ac["hex"] != null &
